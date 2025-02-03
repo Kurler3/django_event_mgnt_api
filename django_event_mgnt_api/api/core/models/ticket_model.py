@@ -8,7 +8,7 @@ class TicketModel(models.Model):
     event = models.ForeignKey(to=EventModel, on_delete=models.CASCADE, related_name='tickets')
     user = models.ForeignKey(to=User, on_delete=models.CASCADE, related_name='tickets', db_index=True)
 
-    quantity = models.IntegerField(min_value=1)
+    quantity = models.IntegerField()
 
     # Price paid for all tickets.
     total = models.DecimalField(max_digits=10, decimal_places=2)
