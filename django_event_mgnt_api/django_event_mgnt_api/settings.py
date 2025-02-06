@@ -58,7 +58,7 @@ INSTALLED_APPS = [
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework_simplejwt.authentication.CookieJWTAuthentication',
     ),
     # Global permission classes to require authentication for all views by default
     'DEFAULT_PERMISSION_CLASSES': (
@@ -67,6 +67,10 @@ REST_FRAMEWORK = {
 }
 
 SIMPLE_JWT = {
+
+    'ACCESS_TOKEN_COOKIE': 'access_token',  # Name of the access token cookie
+    'REFRESH_TOKEN_COOKIE': 'refresh_token',  # Name of the refresh token cookie
+
     # Access token settings
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=15),  # Access token expires in 15 minutes
     'REFRESH_TOKEN_LIFETIME': timedelta(days=7),  # Refresh token expires in 7 days

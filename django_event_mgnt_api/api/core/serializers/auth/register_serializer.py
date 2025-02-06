@@ -2,7 +2,8 @@ from rest_framework import serializers
 from django.contrib.auth.models import User
 
 class RegisterSerializer(serializers.ModelSerializer):
-    
+
+    # Make sure the field is not visible in the response
     password = serializers.CharField(max_length=100, min_length=8, write_only=True)
 
     class Meta:
