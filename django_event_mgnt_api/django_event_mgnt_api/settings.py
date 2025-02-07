@@ -58,7 +58,8 @@ INSTALLED_APPS = [
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.CookieJWTAuthentication',
+        # 'rest_framework_simplejwt.authentication.CookieJWTAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
     # Global permission classes to require authentication for all views by default
     'DEFAULT_PERMISSION_CLASSES': (
