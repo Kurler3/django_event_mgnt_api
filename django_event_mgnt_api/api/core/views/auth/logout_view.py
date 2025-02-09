@@ -6,7 +6,9 @@ class LogoutView(APIView):
 
     def post(self, request):
 
-        # Delete access token cookie.
+        # Set header to delete the access token cookie and the refresh token cookie as well.
+
+        # Blacklist both JWTs.
 
         pass
 
