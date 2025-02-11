@@ -2,7 +2,9 @@ from django.urls import path
 from ..core import (
     RegisterView, 
     LoginView, 
-    TestView
+    TestView,
+    RefreshTokenView,
+    LogoutView,
 )
 
 urlpatterns = [
@@ -21,9 +23,11 @@ urlpatterns = [
     # POST - /api/v1/auth/token (to login)
     path('auth/token/', LoginView.as_view(), name="login"),
 
-    #TODO - POST - /api/v1/auth/token/refresh (to refresh token)
+    # POST - /api/v1/auth/token/refresh
+    path('auth/token/refresh/', RefreshTokenView.as_view(), name="refresh_token"),
 
-    #TODO - POST - /api/v1/auth/logout (to logout)
+    # POST - /api/v1/auth/logout (to logout)
+    path('auth/logout/', LogoutView.as_view(), name="logout"),
 
     ##########################################
     ## EVENT ROUTES ##########################

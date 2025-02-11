@@ -58,8 +58,6 @@ INSTALLED_APPS = [
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        # 'rest_framework_simplejwt.authentication.CookieJWTAuthentication',
-        # 'rest_framework_simplejwt.authentication.JWTAuthentication',
         'api.core.auth.cookie_auth.CookieJWTAuthentication',
     ),
     # Global permission classes to require authentication for all views by default
@@ -118,7 +116,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'django_event_mgnt_api.wsgi.application'
-
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases

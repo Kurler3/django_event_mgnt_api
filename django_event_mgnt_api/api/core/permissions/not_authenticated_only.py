@@ -9,12 +9,8 @@ class NotAuthenticatedOnly(BasePermission):
             settings.SIMPLE_JWT['ACCESS_TOKEN_COOKIE']
         ) is not None
 
-        has_refresh_token = request.COOKIES.get(
-            settings.SIMPLE_JWT['REFRESH_TOKEN_COOKIE']
-        ) is not None
-
-        # If user has access token or refresh token, then they are authenticated.
-        if has_access_token or has_refresh_token:
+        # If user has access token, then they are authenticated.
+        if has_access_token:
             return False
 
         return True
