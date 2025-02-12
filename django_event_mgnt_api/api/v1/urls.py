@@ -7,6 +7,11 @@ from ..core import (
     LogoutView,
 )
 
+from .views.events import (
+    CreateEventView,
+    UpdateEventView,
+)
+
 urlpatterns = [
 
     # GET - /api/v1/test (to test authentication middleware)
@@ -34,8 +39,14 @@ urlpatterns = [
     ##########################################
 
     #TODO - Event routes.
+    path('events/create', CreateEventView.as_view(), name='create_event'),
+    path('events/update/<int:pk>', UpdateEventView.as_view(), name='update_event'),
 
-    
+    #TODO - Get event view
+    #TODO - Delete event view
+
+    #TODO - Get all events view (filter by owned events or all.)
+
     ##########################################
     ## TICKET ROUTES #########################
     ##########################################
