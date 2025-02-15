@@ -2,10 +2,13 @@ from rest_framework.views import APIView
 from django.conf import settings
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.permissions import AllowAny
 
 # Custom logout view, because will delete access token and refresh token cookies.
 # By default, all routes are protected, so 
 class LogoutView(APIView):
+
+    permission_classes = [AllowAny]
 
     def post(self, request):
 

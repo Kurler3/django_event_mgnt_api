@@ -5,7 +5,7 @@ from ...serializers import EventSerializer
 from ....core.models import EventModel
 
 class UpdateEventView(APIView):
-    def put(self, request, pk):
+    def patch(self, request, pk):
 
         # Get the event object
         event = EventModel.objects.get(pk=pk)
@@ -20,7 +20,12 @@ class UpdateEventView(APIView):
                 status=status.HTTP_403_FORBIDDEN
             )
 
-        serializer = EventSerializer(event, data=request.data)
+        serializer = EventSerializer(
+            instance=event, 
+            data=request.data, 
+            partial=True,
+            context={'request': request}
+        )
         
         if serializer.is_valid():
             

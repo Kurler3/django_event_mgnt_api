@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from ....core.models import EventModel
+from rest_framework.exceptions import ValidationError
 
 class EventSerializer(serializers.ModelSerializer):
 
@@ -37,3 +38,11 @@ class EventSerializer(serializers.ModelSerializer):
         # Call the parent class's update method
         return super().update(instance, validated_data)
     
+
+    # Override the validate method to check for unknown fields in the request data.
+    def validate(self, data):
+        if hasattr(self, 'initial_data'):
+            unknown_keys = set(self.initial_data.keys()) - set(self.fields.keys())
+            if unknown_keys:
+                raise ValidationError(f"Got unknown fields: {unknown_keys}")
+        return data

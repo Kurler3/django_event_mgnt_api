@@ -4,13 +4,14 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.response import Response
 from rest_framework import status
 from django.conf import settings
-from ...permissions.not_authenticated_only import NotAuthenticatedOnly
+# from ...permissions.not_authenticated_only import NotAuthenticatedOnly
+from rest_framework.permissions import AllowAny
 
 # Custom login view, because will set access token and refresh token as http only cookies.
 class LoginView(APIView):
 
     # Opens up the route to users that are not authenticated ONLY
-    permission_classes = [NotAuthenticatedOnly]
+    permission_classes = [AllowAny]
 
     def post(self, request):
 

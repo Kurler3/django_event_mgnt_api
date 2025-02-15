@@ -27,7 +27,8 @@ class CookieJWTAuthentication(BaseAuthentication):
             return (user, None)
 
         except Exception:
-            raise AuthenticationFailed('Invalid access token')
+            return None
+            # raise AuthenticationFailed('Invalid access token')
 
     # get_user function to get the user from the access token.
     def get_user(self, token):
