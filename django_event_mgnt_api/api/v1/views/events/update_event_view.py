@@ -2,24 +2,26 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from ...serializers import EventSerializer
-from ....core.models import EventModel
+from ....core import (
+    EventModel,
+)
+from ....core.permissions import EventOrganizerOnly
+from django.shortcuts import get_object_or_404
+from rest_framework.permissions import IsAuthenticated
+
 
 class UpdateEventView(APIView):
+
+    permission_classes = [IsAuthenticated, EventOrganizerOnly]
+
     def patch(self, request, pk):
 
         # Get the event object
-        event = EventModel.objects.get(pk=pk)
+        event = get_object_or_404(EventModel, pk=pk)
 
         # Check if the user is the organizer of the event
-        if event.organizer != request.user:
-            
-            return Response(
-                {
-                    'error': 'You are not the organizer of this event'
-                }, 
-                status=status.HTTP_403_FORBIDDEN
-            )
-
+        self.check_object_permissions(request, event)  # Explicitly call permission check
+        
         serializer = EventSerializer(
             instance=event, 
             data=request.data, 

@@ -10,6 +10,9 @@ from ..core import (
 from .views.events import (
     CreateEventView,
     UpdateEventView,
+    GetEventView,
+    DeleteEventView,
+    ListEventsView,
 )
 
 urlpatterns = [
@@ -41,13 +44,9 @@ urlpatterns = [
     # Event routes.
     path('events/create', CreateEventView.as_view(), name='create_event'),
     path('events/update/<int:pk>', UpdateEventView.as_view(), name='update_event'),
-
-    #TODO - Get event view
-    
-
-    #TODO - Delete event view
-
-    #TODO - Get all events view (filter by owned events or all.)
+    path('events/<int:pk>', GetEventView.as_view(), name='get_event'),
+    path('events/delete/<int:pk>', DeleteEventView.as_view(), name='delete_event'),
+    path('events/list', ListEventsView.as_view(), name='list_events'),
 
     ##########################################
     ## TICKET ROUTES #########################
@@ -55,5 +54,6 @@ urlpatterns = [
 
 
     #TODO - Ticket routes.
+
 
 ]
