@@ -1,6 +1,7 @@
 from rest_framework import serializers
-from ....core.models import EventModel
+from ....core.models import EventModel, TicketModel
 from rest_framework.exceptions import ValidationError
+from django.db.models import Sum
 
 class EventSerializer(serializers.ModelSerializer):
 
@@ -41,8 +42,36 @@ class EventSerializer(serializers.ModelSerializer):
 
     # Override the validate method to check for unknown fields in the request data.
     def validate(self, data):
+
         if hasattr(self, 'initial_data'):
+
+            # Check if there's any keys that do not exist.
             unknown_keys = set(self.initial_data.keys()) - set(self.fields.keys())
             if unknown_keys:
                 raise ValidationError(f"Got unknown fields: {unknown_keys}")
+            
+            # Check if specifying read_only_fiels.
+            for key in self.initial_data.keys():
+                if key in self.Meta.read_only_fields:
+                    raise ValidationError(f"Field '{key}' is read-only")
+            
+            # Check if the new max attendees is lower than the total tickets already bought.
+            if 'max_attendees' in self.initial_data and self.instance:
+                old_max_attendees = self.instance.max_attendees  # Access model field directly
+                new_max_attendees = self.initial_data['max_attendees']
+
+                if not isinstance(new_max_attendees, int):
+                    raise ValidationError('Max attendees must be an integer') 
+
+                # Only check if the new max is lower than the current max
+                if old_max_attendees > new_max_attendees:
+                    # Aggregate sum of ticket quantities directly in the database
+                    total_tickets_bought = TicketModel.objects.filter(event=self.instance).aggregate(
+                        total=Sum('quantity')
+                    )['total'] or 0  # Default to 0 if no tickets exist
+
+                    if total_tickets_bought > new_max_attendees:
+                        raise ValidationError(
+                            'Cannot set max attendees to a number lower than the total tickets already bought'
+                    )
         return data
