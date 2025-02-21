@@ -11,7 +11,11 @@ class ListEventsView(APIView):
         
         events = EventModel.objects.all()
         
-        serialized_data =  EventSerializer(events, many=True).data
+        serialized_data = EventSerializer(
+            events, 
+            many=True,
+            context={'request': request} 
+        ).data
 
         return Response(
             status=status.HTTP_200_OK,

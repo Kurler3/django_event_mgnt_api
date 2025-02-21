@@ -12,13 +12,13 @@ class GetEventView(APIView):
         event = get_object_or_404(EventModel, pk=pk)
 
         # Serialize the event
-        serializer = EventSerializer(event)
+        serializer = EventSerializer(
+            event,
+            context={'request': request} 
+        )
 
         # Return the event.
         return Response({
             'status': status.HTTP_200_OK,
             'data': serializer.data
         })
-
-
-
