@@ -13,6 +13,7 @@ from .views.events import (
     GetEventView,
     DeleteEventView,
     ListEventsView,
+    ListEventsAttendingView,
 )
 
 urlpatterns = [
@@ -47,6 +48,7 @@ urlpatterns = [
     path('events/<int:pk>', GetEventView.as_view(), name='get_event'),
     path('events/delete/<int:pk>', DeleteEventView.as_view(), name='delete_event'),
     path('events/list', ListEventsView.as_view(), name='list_events'),
+    path('events/list/attending', ListEventsAttendingView.as_view(), name='list_events_attending'),
 
     ##########################################
     ## TICKET ROUTES #########################
