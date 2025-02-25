@@ -3,6 +3,7 @@ from ....core.models import EventModel
 from ...serializers.events import EventSerializer
 from rest_framework.response import Response
 from rest_framework import status
+from django.utils.timezone import now
 
 class ListEventsAttendingView(APIView):
 
@@ -12,7 +13,10 @@ class ListEventsAttendingView(APIView):
         
         # List tickets bought by user
         # tickets key on events model => then filtering on the user key on the tickets.
-        user_events = EventModel.objects.filter(tickets__user=request.user).distinct()
+        user_events = EventModel.objects.filter(
+            tickets__user=request.user,
+            end_date__gte=now()
+        ).distinct()
 
         print(user_events)
 
