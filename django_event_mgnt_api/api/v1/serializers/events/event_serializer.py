@@ -74,4 +74,4 @@ class EventSerializer(serializers.ModelSerializer):
                     if total_tickets_bought > new_max_attendees:
                         raise ValidationError('Cannot set max attendees to a number lower than the total tickets already bought')
 
-        return super().validate(self, data)
+        return super().validate(data)

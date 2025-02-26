@@ -8,12 +8,13 @@ from ....core.utils.decorators import (
 from django.db.models import Sum
 from rest_framework.exceptions import ValidationError
 
+
 @with_includes
 @with_unknown_keys_check
 class TicketSerializer(serializers.ModelSerializer):
 
     class Meta:
-        
+
         model = TicketModel
 
         fields = [
@@ -36,6 +37,7 @@ class TicketSerializer(serializers.ModelSerializer):
         # - Need to set user.
         # - Need to set total by using the event.price_per_ticket * ticket.quantity.
     def create(self, validated_data):
+
         user = self.context['request'].user
         validated_data['created_by'] = user
         validated_data['updated_by'] = user
@@ -46,10 +48,15 @@ class TicketSerializer(serializers.ModelSerializer):
 
         return super().create(validated_data)
 
+    def update(self, instance, validated_data):
+
+        validated_data['updated_by'] = self.context['request'].user
+
+        return super().update(instance, validated_data)
 
     def validate(self, data):
 
-        if hasattr(self, 'initial_data') and 'event' in self.initial_data and self.instance:
+        if hasattr(self, 'initial_data') and 'event' in self.initial_data and self.instance and 'quantity' in self.initial_data:
 
             # Get all the sum of tickets already bought for this event
             total_tickets_bought = TicketModel.objects.filter(event=self.initial_data['event']).aaggregate(
@@ -57,6 +64,7 @@ class TicketSerializer(serializers.ModelSerializer):
             )
 
             if total_tickets_bought + self.initial_data['quantity'] > self.initial_data['event'].max_attendees:
-                raise ValidationError('Trying to buy more tickets than event allows')
+                raise ValidationError(
+                    'Trying to buy more tickets than event allows')
 
-        return super().validate(self, data)
+        return super().validate(data)

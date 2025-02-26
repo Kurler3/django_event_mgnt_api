@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from .ticket_model import TicketModel
 from .event_model import EventModel
+from django.forms import ValidationError
 
 class PaymentModel(models.Model):
 
@@ -18,6 +19,10 @@ class PaymentModel(models.Model):
 
     def __str__(self):
         return f'{self.user.username} - {self.amount}'
+
+    def clean(self):
+        if self.amount <= 0:
+            raise ValidationError('Amount paid must not be smaller or equal to 0')
 
     class Meta:
         db_table = 'payment'
