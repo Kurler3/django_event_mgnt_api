@@ -16,6 +16,10 @@ from .views.events import (
     ListEventsAttendingView,
 )
 
+from .views.tickets import (
+    BuyTicketsView,
+)
+
 urlpatterns = [
 
     # GET - /api/v1/test (to test authentication middleware)
@@ -55,7 +59,8 @@ urlpatterns = [
     ##########################################
 
 
-    #TODO - Ticket routes.
+    # Buy tickets for event.
+    path('tickets/buy', BuyTicketsView.as_view(), name='buy_tickets'),
 
 
 ]

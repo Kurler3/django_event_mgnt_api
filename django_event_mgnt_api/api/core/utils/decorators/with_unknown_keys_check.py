@@ -20,7 +20,7 @@ def with_unknown_keys_check(serializer_class):
                 if key in self.Meta.read_only_fields:
                     raise ValidationError(f"Field '{key}' is read-only")
 
-        original_validate_fn(self, data)
+        return original_validate_fn(self, data)
     
     serializer_class.validate = new_validate_fn
 

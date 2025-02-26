@@ -2,10 +2,12 @@ from rest_framework.views import APIView
 from ...serializers import TicketSerializer, PaymentSerializer
 from rest_framework.response import Response
 from rest_framework import status
+from django.db import transaction
+
 
 class BuyTicketsView(APIView):
 
-    #TODO - Need to put this in a transaction.
+    @transaction.atomic
     def post(self, request):
 
         ctx = { 'request': request }
@@ -24,14 +26,13 @@ class BuyTicketsView(APIView):
 
         # Save the ticket
         ticket_serializer.save()
-
-        amount_paid = ticket_serializer.data['quantity'] * ticket_serializer.data['event'].price_per_ticket
+        
 
         # Init the payment serializer.
         payment_serializer = PaymentSerializer(
             data={
                 'ticket': ticket_serializer.data,
-                'amount': amount_paid
+                'amount': ticket_serializer.data['total'], #TODO - This isnt working at all.
             },
             context=ctx
         )
