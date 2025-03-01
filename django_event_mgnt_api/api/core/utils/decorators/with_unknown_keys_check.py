@@ -14,11 +14,12 @@ def with_unknown_keys_check(serializer_class):
             unknown_keys = set(self.initial_data.keys()) - set(self.fields.keys())
             if unknown_keys:
                 raise ValidationError(f"Got unknown fields: {unknown_keys}")
-            
-            # Check if specifying read_only_fiels.
-            for key in self.initial_data.keys():
-                if key in self.Meta.read_only_fields:
-                    raise ValidationError(f"Field '{key}' is read-only")
+
+            if hasattr(self.Meta, 'read_only_fields'):
+                # Check if specifying read_only_fiels.
+                for key in self.initial_data.keys():
+                    if key in self.Meta.read_only_fields:
+                        raise ValidationError(f"Field '{key}' is read-only")
 
         return original_validate_fn(self, data)
     

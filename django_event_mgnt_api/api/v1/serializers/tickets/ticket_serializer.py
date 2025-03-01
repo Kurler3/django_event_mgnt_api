@@ -17,10 +17,7 @@ class TicketSerializer(serializers.ModelSerializer):
 
         model = TicketModel
 
-        fields = [
-            'quantity',
-            'event',
-        ]
+        fields = '__all__'
 
         read_only_fields = [
             'user',

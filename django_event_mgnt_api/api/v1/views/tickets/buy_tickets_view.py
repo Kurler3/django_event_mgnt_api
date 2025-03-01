@@ -27,12 +27,11 @@ class BuyTicketsView(APIView):
         # Save the ticket
         ticket_serializer.save()
         
-
         # Init the payment serializer.
         payment_serializer = PaymentSerializer(
             data={
-                'ticket': ticket_serializer.data,
-                'amount': ticket_serializer.data['total'], #TODO - This isnt working at all.
+                'ticket': ticket_serializer.data['id'],
+                'amount': ticket_serializer.data['total'],
             },
             context=ctx
         )
