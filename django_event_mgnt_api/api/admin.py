@@ -6,6 +6,6 @@ from .core import (
 )
 
 # Register your models here.
-admin.register(EventModel)
-admin.register(PaymentModel)
-admin.register(TicketModel)
+admin.site.register(EventModel)
+admin.site.register(PaymentModel)
+admin.site.register(TicketModel)

@@ -5,6 +5,7 @@ from rest_framework import status
 from django.db import transaction
 
 
+
 class BuyTicketsView(APIView):
 
     @transaction.atomic

@@ -27,7 +27,6 @@ class TicketSerializer(serializers.ModelSerializer):
             'created_at',
             'created_by',
             'code',
-            'is_used'
         ]
 
     # If creating
@@ -48,24 +47,32 @@ class TicketSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
 
-        validated_data['updated_by'] = self.context['request'].user
+        user = self.context['request'].user
+
+        # If the organizer is not the user => error
+        if instance.event.organizer != user:
+            raise ValidationError('Only the organizer can do this!')
+
+        validated_data['updated_by'] = user
 
         return super().update(instance, validated_data)
 
     def validate(self, data):
 
-        if hasattr(self, 'initial_data') and 'event' in self.initial_data and self.instance and 'quantity' in self.initial_data:
+        if hasattr(self, 'initial_data') and 'event' in self.initial_data and 'quantity' in self.initial_data:
+
+            event = EventModel.objects.get(pk=self.initial_data['event'])
 
             # Check if event exists.
-            if not EventModel.objects.get(pk=self.initial_data['event']):
+            if not event:
                 raise ValidationError('Event specified doesn\'t exist')
 
             # Get all the sum of tickets already bought for this event
-            total_tickets_bought = TicketModel.objects.filter(event=self.initial_data['event']).aaggregate(
+            total_tickets_bought = TicketModel.objects.filter(event=self.initial_data['event']).aggregate(
                 total=Sum('quantity')
-            )
+            )['total'] or 0
 
-            if total_tickets_bought + self.initial_data['quantity'] > self.initial_data['event'].max_attendees:
+            if total_tickets_bought + self.initial_data['quantity'] > event.max_attendees:
                 raise ValidationError(
                     'Trying to buy more tickets than event allows')
             

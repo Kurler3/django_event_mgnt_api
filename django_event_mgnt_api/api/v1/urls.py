@@ -18,6 +18,13 @@ from .views.events import (
 
 from .views.tickets import (
     BuyTicketsView,
+    ListEventTicketsView,
+    UseTicketView,
+)
+
+
+from .views.payments import (
+    ListPaymentsView
 )
 
 urlpatterns = [
@@ -58,9 +65,14 @@ urlpatterns = [
     ## TICKET ROUTES #########################
     ##########################################
 
-
-    # Buy tickets for event.
     path('tickets/buy', BuyTicketsView.as_view(), name='buy_tickets'),
+    path('tickets/list/<int:event_pk>', ListEventTicketsView.as_view(), name='list_event_tickets_bought'),
+    path('tickets/<str:code>/use', UseTicketView.as_view(), name='use-ticket'),
 
+    ##########################################
+    ## PAYMENTS ROUTES #######################
+    ##########################################
 
-]
+    path('payments/list', ListPaymentsView.as_view(), name='list_payments'),
+
+]   
