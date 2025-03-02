@@ -8,10 +8,19 @@ from ....core.utils.decorators import (
 from django.db.models import Sum
 from rest_framework.exceptions import ValidationError
 
+from ..events import EventSerializer
+from ..user import UserSerializer
 
 @with_includes
 @with_unknown_keys_check
 class TicketSerializer(serializers.ModelSerializer):
+
+    foreign_key_to_serializer_map = {
+        'event': EventSerializer,
+        'user': UserSerializer,
+        'created_by': UserSerializer,
+        'updated_by': UserSerializer,
+    }
 
     class Meta:
 

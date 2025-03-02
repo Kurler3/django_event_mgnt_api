@@ -15,6 +15,8 @@ class PaymentSerializer(serializers.ModelSerializer):
     foreign_key_to_serializer_map = {
         'event': EventSerializer,
         'user': UserSerializer,
+        'ticket': TicketSerializer,
+        'created_by': UserSerializer,
     }
 
     class Meta:
