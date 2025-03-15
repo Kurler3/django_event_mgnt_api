@@ -21,11 +21,25 @@ class PaymentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = PaymentModel    
-        fields = '__all__'
+        fields = [
+            'ticket',
+            'amount',
+        ]
+
+        read_only_fields = [
+            'user',
+            'event',
+            'payment_date',
+            'created_by'
+        ]
 
     def create(self, validated_data):
+
         user = self.context['request'].user
         validated_data['event'] = validated_data['ticket'].event
         validated_data['created_by'] = user
         validated_data['user'] = user
+
+        print("PAYMENT VALIDATED DATA: ", validated_data)
+
         return super().create(validated_data)

@@ -18,8 +18,6 @@ class ListEventsAttendingView(APIView):
             end_date__gte=now()
         ).distinct()
 
-        print(user_events)
-
         # Pass the events through the serializer
         serialized_events = EventSerializer(
             user_events,
