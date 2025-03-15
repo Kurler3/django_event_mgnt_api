@@ -1,23 +1,12 @@
 from rest_framework.views import APIView
-from ....core import EventModel
+from ....core import EventModel, with_pagination, EventFilter, with_filtering, with_ordering
 from ...serializers import EventSerializer
-from rest_framework.response import Response
-from rest_framework import status
+
 
 class ListEventsView(APIView):
 
-    # Get all events (public)
+    @with_pagination(EventSerializer)
+    @with_ordering(allowed_fields=['start_date', 'end_date'])
+    @with_filtering(filtering_class=EventFilter, sendResponse=False)
     def get(self, request):
-        
-        events = EventModel.objects.all()
-        
-        serialized_data = EventSerializer(
-            events, 
-            many=True,
-            context={'request': request} 
-        ).data
-
-        return Response(
-            status=status.HTTP_200_OK,
-            data=serialized_data
-        )
+        return EventModel.objects.all()

@@ -1,32 +1,17 @@
 from rest_framework.views import APIView
 from ....core.models import TicketModel
 from ...serializers.tickets import TicketSerializer
-from rest_framework.response import Response
-from rest_framework import status
+from ....core import with_pagination
 
 class ListEventTicketsView(APIView):
 
+    @with_pagination(serializer_class=TicketSerializer)
     def get(self, request, event_pk):
-
         # Query all tickets belonging to this user for this event.
-        tickets = TicketModel.objects.filter(
+        return TicketModel.objects.filter(
             event=event_pk,
             user=request.user,
         ) 
-
-        # Serialize it.
-        serialized_tickets = TicketSerializer(
-            tickets,
-            many=True,
-            context={ 'request': request }
-        )
-
-        # Return the serialized data.
-        return Response(
-            status=status.HTTP_200_OK,
-            data=serialized_tickets.data
-        )
-
 
 
 

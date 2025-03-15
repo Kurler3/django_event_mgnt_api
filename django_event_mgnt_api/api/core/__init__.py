@@ -4,3 +4,4 @@ from .views import *
 from .auth import *
 from .permissions import *
 from .utils import *
+from .filters import *

@@ -3,21 +3,10 @@ from ....core.models import PaymentModel
 from ...serializers.payments import PaymentSerializer
 from rest_framework.response import Response
 from rest_framework import status
+from ....core import with_pagination
 
 class ListPaymentsView(APIView):
 
+    @with_pagination(serializer_class=PaymentSerializer)
     def get(self, request):
-
-        payments = PaymentModel.objects.filter(user=request.user)
-
-        payments_serializer = PaymentSerializer(
-            payments,
-            many=True,
-            context={'request': request}
-        )
-
-        return Response(
-            status=status.HTTP_200_OK,
-            data=payments_serializer.data,
-        )
-
+        return PaymentModel.objects.filter(user=request.user)
